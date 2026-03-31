@@ -202,7 +202,60 @@ export async function POST(request: Request) {
             ],
           },
         ],
-        max_output_tokens: 220,
+        max_output_tokens: 520,
+        text: {
+          format: {
+            type: "json_schema",
+            name: "color_match_analysis",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              properties: {
+                skinToneExplanation: { type: "string" },
+                styleDirection: {
+                  type: "string",
+                  enum: ["feminine", "masculine", "unisex"],
+                },
+                dressColors: {
+                  type: "array",
+                  minItems: 3,
+                  maxItems: 3,
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    properties: {
+                      name: { type: "string" },
+                      hex: { type: "string" },
+                      reason: { type: "string" },
+                    },
+                    required: ["name", "hex", "reason"],
+                  },
+                },
+                dressPatterns: {
+                  type: "array",
+                  minItems: 3,
+                  maxItems: 3,
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    properties: {
+                      name: { type: "string" },
+                      reason: { type: "string" },
+                    },
+                    required: ["name", "reason"],
+                  },
+                },
+              },
+              required: [
+                "skinToneExplanation",
+                "styleDirection",
+                "dressColors",
+                "dressPatterns",
+              ],
+            },
+          },
+        },
       }),
     })
 

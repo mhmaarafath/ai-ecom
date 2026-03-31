@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { ChangeEvent, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -191,9 +191,9 @@ export function ColorMatchPageClient() {
             Upload your selfie and preview recommended color combinations.
           </p>
         </div>
-        <Button variant="outline" render={<Link href="/" />}>
+        <Link href="/" className={buttonVariants({ variant: "outline" })}>
           Back to Shop
-        </Button>
+        </Link>
       </header>
 
       <section className="grid gap-4 lg:grid-cols-2">

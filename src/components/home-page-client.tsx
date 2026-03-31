@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   NavigationMenu,
@@ -69,9 +69,9 @@ export function HomePageClient() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Button render={<Link href="/login" />}>
+        <Link href="/login" className={buttonVariants()}>
           Login
-        </Button>
+        </Link>
       </header>
 
       <section id="shop" className="mb-10">
@@ -115,9 +115,9 @@ export function HomePageClient() {
         <p className="mt-2 text-sm text-muted-foreground">
           Find dress colors that best complement your face tone.
         </p>
-        <Button className="mt-4" render={<Link href="/color-match" />}>
+        <Link href="/color-match" className={`${buttonVariants()} mt-4 inline-flex`}>
           Open Color Match Page
-        </Button>
+        </Link>
       </section>
     </main>
   )
