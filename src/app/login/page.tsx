@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { buttonVariants } from "@/components/ui/button"
 import { LoginForm } from "@/components/login-form"
 
 export const metadata: Metadata = {
@@ -12,7 +11,10 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="mb-4 w-full max-w-sm md:max-w-4xl">
-        <Link href="/" className={buttonVariants({ variant: "outline" })}>
+        <Link
+          href="/"
+          className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium transition-all hover:bg-muted"
+        >
           Visit Website
         </Link>
       </div>
