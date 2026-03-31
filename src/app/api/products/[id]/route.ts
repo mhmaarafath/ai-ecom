@@ -107,3 +107,31 @@ export async function PUT(
     return NextResponse.json({ message }, { status: 500 })
   }
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const productId = Number(id)
+    if (Number.isNaN(productId)) {
+      return NextResponse.json({ message: "Invalid product id" }, { status: 400 })
+    }
+
+    const supabase = createSupabaseAdminClient()
+    const { error } = await supabase.from("products").delete().eq("id", productId)
+
+    if (error) {
+      return NextResponse.json(
+        { message: "Failed to delete product", detail: error.message },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Internal server error"
+    return NextResponse.json({ message }, { status: 500 })
+  }
+}
