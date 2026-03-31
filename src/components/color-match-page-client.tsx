@@ -191,8 +191,8 @@ export function ColorMatchPageClient() {
             Upload your selfie and preview recommended color combinations.
           </p>
         </div>
-        <Button asChild variant="outline">
-          <Link href="/">Back to Shop</Link>
+        <Button variant="outline" render={<Link href="/" />}>
+          Back to Shop
         </Button>
       </header>
 

@@ -69,8 +69,8 @@ export function HomePageClient() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Button asChild>
-          <Link href="/login">Login</Link>
+        <Button render={<Link href="/login" />}>
+          Login
         </Button>
       </header>
 
@@ -115,8 +115,8 @@ export function HomePageClient() {
         <p className="mt-2 text-sm text-muted-foreground">
           Find dress colors that best complement your face tone.
         </p>
-        <Button asChild className="mt-4">
-          <Link href="/color-match">Open Color Match Page</Link>
+        <Button className="mt-4" render={<Link href="/color-match" />}>
+          Open Color Match Page
         </Button>
       </section>
     </main>
