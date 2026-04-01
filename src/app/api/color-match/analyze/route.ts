@@ -16,8 +16,8 @@ type ColorMatchResult = {
   skin_tone: "fair" | "light" | "medium" | "olive" | "dark"
   undertone: "warm" | "cool" | "neutral"
   recommendations: {
-    colors: string[]
-    avoid_colors: string[]
+    colors: Array<{ name: string; hex: string }>
+    avoid_colors: Array<{ name: string; hex: string }>
     clothing: {
       neck: string[]
       sleeve: string[]
@@ -94,6 +94,7 @@ export async function POST(request: Request) {
                   "3) skin tone category (fair, light, medium, olive, dark),",
                   "4) undertone (warm, cool, neutral).",
                   "Then provide recommendations for colors, avoid colors, clothing (neck, sleeve, fit, patterns), and 3 outfits.",
+                  "For colors and avoid_colors, return objects with both name and exact hex code.",
                   "Return strictly valid JSON only in the exact schema.",
                 ].join(" "),
               },
@@ -138,13 +139,29 @@ export async function POST(request: Request) {
                       type: "array",
                       minItems: 5,
                       maxItems: 8,
-                      items: { type: "string" },
+                      items: {
+                        type: "object",
+                        additionalProperties: false,
+                        properties: {
+                          name: { type: "string" },
+                          hex: { type: "string", pattern: "^#([A-Fa-f0-9]{6})$" },
+                        },
+                        required: ["name", "hex"],
+                      },
                     },
                     avoid_colors: {
                       type: "array",
                       minItems: 3,
                       maxItems: 5,
-                      items: { type: "string" },
+                      items: {
+                        type: "object",
+                        additionalProperties: false,
+                        properties: {
+                          name: { type: "string" },
+                          hex: { type: "string", pattern: "^#([A-Fa-f0-9]{6})$" },
+                        },
+                        required: ["name", "hex"],
+                      },
                     },
                     clothing: {
                       type: "object",
@@ -207,8 +224,18 @@ export async function POST(request: Request) {
           skin_tone: "medium",
           undertone: "neutral",
           recommendations: {
-            colors: ["Navy Blue", "Emerald Green", "White", "Charcoal", "Beige"],
-            avoid_colors: ["Neon Yellow", "Lime Green", "Hot Pink"],
+            colors: [
+              { name: "Navy Blue", hex: "#1E3A8A" },
+              { name: "Emerald Green", hex: "#10B981" },
+              { name: "White", hex: "#FFFFFF" },
+              { name: "Charcoal", hex: "#374151" },
+              { name: "Beige", hex: "#D6BC9A" },
+            ],
+            avoid_colors: [
+              { name: "Neon Yellow", hex: "#D9F99D" },
+              { name: "Lime Green", hex: "#84CC16" },
+              { name: "Hot Pink", hex: "#EC4899" },
+            ],
             clothing: {
               neck: ["V-neck", "Round neck"],
               sleeve: ["Half sleeve", "Long sleeve"],

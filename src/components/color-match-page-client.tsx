@@ -15,8 +15,8 @@ type AnalyzeResult = {
   skin_tone: "fair" | "light" | "medium" | "olive" | "dark"
   undertone: "warm" | "cool" | "neutral"
   recommendations: {
-    colors: string[]
-    avoid_colors: string[]
+    colors: Array<{ name: string; hex: string }>
+    avoid_colors: Array<{ name: string; hex: string }>
     clothing: {
       neck: string[]
       sleeve: string[]
@@ -45,58 +45,6 @@ function toSentenceCase(value: string): string {
   const text = value.trim()
   if (!text) return text
   return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
-const COLOR_OVERRIDES: Record<string, string> = {
-  "light blue": "#60a5fa",
-  "pastel blue": "#93c5fd",
-  "pastel colors": "#f9a8d4",
-  "warm white": "#fff4e6",
-  ivory: "#fffff0",
-  cream: "#fffdd0",
-  camel: "#c19a6b",
-  tan: "#d2b48c",
-  mustard: "#d4a017",
-  rust: "#b7410e",
-  terracotta: "#e2725b",
-  "ashy gray": "#b2b6bd",
-  "cool beige": "#d8c8b0",
-  "icy pastels": "#cdeef7",
-  "neon green": "#39ff14",
-  "bright magenta": "#ff00aa",
-  "hot pink": "#ec4899",
-  "charcoal": "#374151",
-  "charcoal gray": "#374151",
-  "neon colors": "#a3e635",
-  "dark brown": "#5b3a29",
-  beige: "#d6bc9a",
-}
-
-function colorTextToHex(value: string): string {
-  const normalized = value.trim().toLowerCase().replace(/[_-]+/g, " ")
-  if (normalized.startsWith("#")) return normalized
-  if (COLOR_OVERRIDES[normalized]) return COLOR_OVERRIDES[normalized]
-
-  if (normalized.includes("white")) return "#f8fafc"
-  if (normalized.includes("ivory")) return "#fffff0"
-  if (normalized.includes("cream")) return "#fffdd0"
-  if (normalized.includes("beige")) return "#e8d7b7"
-  if (normalized.includes("gray") || normalized.includes("grey")) return "#9ca3af"
-  if (normalized.includes("pastel")) return "#d8b4fe"
-  if (normalized.includes("neon")) return "#39ff14"
-  if (normalized.includes("magenta")) return "#ff00aa"
-  if (normalized.includes("mustard")) return "#d4a017"
-  if (normalized.includes("camel")) return "#c19a6b"
-  if (normalized.includes("tan")) return "#d2b48c"
-  if (normalized.includes("rust")) return "#b7410e"
-  if (normalized.includes("terracotta")) return "#e2725b"
-
-  let hash = 0
-  for (let i = 0; i < normalized.length; i += 1) {
-    hash = normalized.charCodeAt(i) + ((hash << 5) - hash)
-  }
-  const hue = Math.abs(hash % 360)
-  return `hsl(${hue}, 65%, 55%)`
 }
 
 function extractApiErrorMessage(payload: unknown, fallback: string): string {
@@ -394,12 +342,12 @@ export function ColorMatchPageClient() {
               {analysis?.recommendations.colors?.length ? (
                 <div className="flex flex-wrap gap-2">
                   {analysis.recommendations.colors.map((color) => (
-                    <span key={color} className="inline-flex items-center gap-2 rounded-md border px-2 py-1 text-xs">
+                    <span key={`${color.name}-${color.hex}`} className="inline-flex items-center gap-2 rounded-md border px-2 py-1 text-xs">
                       <span
                         className="h-3 w-3 rounded-full border"
-                        style={{ backgroundColor: colorTextToHex(color) }}
+                        style={{ backgroundColor: color.hex }}
                       />
-                      {toTitleCase(color)}
+                      {toTitleCase(color.name)}
                     </span>
                   ))}
                 </div>
@@ -413,12 +361,12 @@ export function ColorMatchPageClient() {
               {analysis?.recommendations.avoid_colors?.length ? (
                 <div className="flex flex-wrap gap-2">
                   {analysis.recommendations.avoid_colors.map((color) => (
-                    <span key={color} className="inline-flex items-center gap-2 rounded-md border border-destructive/40 px-2 py-1 text-xs text-destructive">
+                    <span key={`${color.name}-${color.hex}`} className="inline-flex items-center gap-2 rounded-md border border-destructive/40 px-2 py-1 text-xs text-destructive">
                       <span
                         className="h-3 w-3 rounded-full border border-destructive/40"
-                        style={{ backgroundColor: colorTextToHex(color) }}
+                        style={{ backgroundColor: color.hex }}
                       />
-                      {toTitleCase(color)}
+                      {toTitleCase(color.name)}
                     </span>
                   ))}
                 </div>

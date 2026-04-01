@@ -7,9 +7,6 @@
     <list default="true" id="39d83853-7669-4205-9e08-734ba54e202c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/designs/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/color-match/designs/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/try-on/route.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +96,7 @@
       <workItem from="1774928407933" duration="899000" />
       <workItem from="1774929424128" duration="53000" />
       <workItem from="1774932702765" duration="17783000" />
-      <workItem from="1775010293271" duration="8799000" />
+      <workItem from="1775010293271" duration="9555000" />
     </task>
     <servers />
   </component>
