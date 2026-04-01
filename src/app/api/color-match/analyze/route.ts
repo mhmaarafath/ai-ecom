@@ -11,35 +11,26 @@ type OpenAiResponse = {
 }
 
 type ColorMatchResult = {
-  skinToneExplanation: string
-  styleDirection: "feminine" | "masculine" | "unisex"
-  dressColors: Array<{
-    name: string
-    hex: string
-    reason: string
-  }>
-  dressPatterns: Array<{
-    name: string
-    reason: string
-  }>
-}
-
-function normalizeStyleDirection(value: unknown): "feminine" | "masculine" | "unisex" {
-  const text = String(value ?? "").toLowerCase().trim()
-  if (text === "feminine" || text === "female" || text === "woman" || text === "women") {
-    return "feminine"
+  gender: "male" | "female" | "unclear"
+  face_shape: "round" | "oval" | "square" | "heart" | "long"
+  skin_tone: "fair" | "light" | "medium" | "olive" | "dark"
+  undertone: "warm" | "cool" | "neutral"
+  recommendations: {
+    colors: string[]
+    avoid_colors: string[]
+    clothing: {
+      neck: string[]
+      sleeve: string[]
+      fit: string[]
+      patterns: string[]
+    }
+    outfits: Array<{
+      top: string
+      bottom: string
+      colors: string
+      reason: string
+    }>
   }
-  if (text === "masculine" || text === "male" || text === "man" || text === "men") {
-    return "masculine"
-  }
-  return "unisex"
-}
-
-function toHexColor(input: unknown): string {
-  const value = String(input ?? "").trim()
-  if (!value) return "#808080"
-  if (value.startsWith("#")) return value
-  return `#${value}`
 }
 
 function extractOutputText(payload: OpenAiResponse): string {
@@ -48,99 +39,10 @@ function extractOutputText(payload: OpenAiResponse): string {
   return outputText?.trim() ?? ""
 }
 
-function extractSkinToneExplanation(text: string): string {
-  const cleaned = text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim()
-  const match = cleaned.match(/"skinToneExplanation"\s*:\s*"([^"]+)"/i)
-  if (match?.[1]) {
-    return match[1].trim()
-  }
-  return (
-    cleaned
-      .split("\n")
-      .map((line) => line.trim())
-      .find((line) => line.length > 0 && !line.startsWith("{") && !line.startsWith("[")) ||
-    "Your skin tone appears balanced in this photo. Neutral-to-rich tones are likely to suit you well."
-  )
-}
-
 function parseResult(text: string): ColorMatchResult | null {
   const cleaned = text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim()
-  const jsonCandidate = (() => {
-    const first = cleaned.indexOf("{")
-    const last = cleaned.lastIndexOf("}")
-    if (first !== -1 && last !== -1 && last > first) {
-      return cleaned.slice(first, last + 1)
-    }
-    return cleaned
-  })()
-
   try {
-    const parsed = JSON.parse(jsonCandidate) as Record<string, unknown>
-
-    const explanation =
-      String(
-        parsed.skinToneExplanation ??
-          parsed.skin_tone_explanation ??
-          parsed.explanation ??
-          ""
-      ).trim() || "Balanced skin tone detected from the provided image."
-
-    const rawColors = Array.isArray(parsed.dressColors)
-      ? parsed.dressColors
-      : Array.isArray(parsed.colors)
-        ? parsed.colors
-        : []
-    const rawPatterns = Array.isArray(parsed.dressPatterns)
-      ? parsed.dressPatterns
-      : Array.isArray(parsed.patterns)
-        ? parsed.patterns
-        : []
-
-    const dressColors = rawColors
-      .filter(
-        (item): item is Record<string, unknown> => typeof item === "object" && item !== null
-      )
-      .map((item) => ({
-        name: String(item.name ?? item.color ?? "Suggested Color").trim(),
-        hex: toHexColor(item.hex ?? item.hexCode ?? "808080"),
-        reason: String(item.reason ?? item.note ?? "Works well with your tone.").trim(),
-      }))
-      .slice(0, 6)
-
-    const dressPatterns = rawPatterns
-      .filter(
-        (item): item is Record<string, unknown> => typeof item === "object" && item !== null
-      )
-      .map((item) => ({
-        name: String(item.name ?? item.pattern ?? "Suggested Pattern").trim(),
-        reason: String(item.reason ?? item.note ?? "Adds flattering visual balance.").trim(),
-      }))
-      .slice(0, 6)
-
-    const styleDirection = normalizeStyleDirection(
-      parsed.styleDirection ?? parsed.style_direction ?? parsed.style
-    )
-
-    return {
-      skinToneExplanation: explanation,
-      styleDirection,
-      dressColors:
-        dressColors.length > 0
-          ? dressColors
-          : [
-              { name: "Deep Blue", hex: "#2D5EA8", reason: "Clean contrast with your tone." },
-              { name: "Emerald Green", hex: "#1F7A5A", reason: "Enhances natural warmth." },
-              { name: "Soft Beige", hex: "#D9C2A5", reason: "Creates a balanced neutral look." },
-            ],
-      dressPatterns:
-        dressPatterns.length > 0
-          ? dressPatterns
-          : [
-              { name: "Solid Minimal", reason: "Keeps focus on skin-tone harmony." },
-              { name: "Subtle Floral", reason: "Adds softness without overpowering." },
-              { name: "Vertical Stripes", reason: "Adds elegant structure and flow." },
-            ],
-    }
+    return JSON.parse(cleaned) as ColorMatchResult
   } catch {
     return null
   }
@@ -187,12 +89,12 @@ export async function POST(request: Request) {
               {
                 type: "input_text",
                 text: [
-                  "Analyze this face photo and return JSON only with keys:",
-                  "skinToneExplanation: short simple explanation in 1 sentence.",
-                  "styleDirection: one of feminine, masculine, unisex based on apparent style match.",
-                  "dressColors: array of exactly 3 objects with name, hex, reason.",
-                  "dressPatterns: array of exactly 3 objects with name and reason.",
-                  "Focus on wearable and practical fashion suggestions.",
+                  "Analyze the uploaded image and extract:",
+                  "1) gender (male/female/unclear), 2) face shape (round, oval, square, heart, long),",
+                  "3) skin tone category (fair, light, medium, olive, dark),",
+                  "4) undertone (warm, cool, neutral).",
+                  "Then provide recommendations for colors, avoid colors, clothing (neck, sleeve, fit, patterns), and 3 outfits.",
+                  "Return strictly valid JSON only in the exact schema.",
                 ].join(" "),
               },
               {
@@ -202,7 +104,7 @@ export async function POST(request: Request) {
             ],
           },
         ],
-        max_output_tokens: 520,
+        max_output_tokens: 700,
         text: {
           format: {
             type: "json_schema",
@@ -212,47 +114,70 @@ export async function POST(request: Request) {
               type: "object",
               additionalProperties: false,
               properties: {
-                skinToneExplanation: { type: "string" },
-                styleDirection: {
+                gender: {
                   type: "string",
-                  enum: ["feminine", "masculine", "unisex"],
+                  enum: ["male", "female", "unclear"],
                 },
-                dressColors: {
-                  type: "array",
-                  minItems: 3,
-                  maxItems: 3,
-                  items: {
-                    type: "object",
-                    additionalProperties: false,
-                    properties: {
-                      name: { type: "string" },
-                      hex: { type: "string" },
-                      reason: { type: "string" },
-                    },
-                    required: ["name", "hex", "reason"],
-                  },
+                face_shape: {
+                  type: "string",
+                  enum: ["round", "oval", "square", "heart", "long"],
                 },
-                dressPatterns: {
-                  type: "array",
-                  minItems: 3,
-                  maxItems: 3,
-                  items: {
-                    type: "object",
-                    additionalProperties: false,
-                    properties: {
-                      name: { type: "string" },
-                      reason: { type: "string" },
+                skin_tone: {
+                  type: "string",
+                  enum: ["fair", "light", "medium", "olive", "dark"],
+                },
+                undertone: {
+                  type: "string",
+                  enum: ["warm", "cool", "neutral"],
+                },
+                recommendations: {
+                  type: "object",
+                  additionalProperties: false,
+                  properties: {
+                    colors: {
+                      type: "array",
+                      minItems: 5,
+                      maxItems: 8,
+                      items: { type: "string" },
                     },
-                    required: ["name", "reason"],
+                    avoid_colors: {
+                      type: "array",
+                      minItems: 3,
+                      maxItems: 5,
+                      items: { type: "string" },
+                    },
+                    clothing: {
+                      type: "object",
+                      additionalProperties: false,
+                      properties: {
+                        neck: { type: "array", items: { type: "string" } },
+                        sleeve: { type: "array", items: { type: "string" } },
+                        fit: { type: "array", items: { type: "string" } },
+                        patterns: { type: "array", items: { type: "string" } },
+                      },
+                      required: ["neck", "sleeve", "fit", "patterns"],
+                    },
+                    outfits: {
+                      type: "array",
+                      minItems: 3,
+                      maxItems: 3,
+                      items: {
+                        type: "object",
+                        additionalProperties: false,
+                        properties: {
+                          top: { type: "string" },
+                          bottom: { type: "string" },
+                          colors: { type: "string" },
+                          reason: { type: "string" },
+                        },
+                        required: ["top", "bottom", "colors", "reason"],
+                      },
+                    },
                   },
+                  required: ["colors", "avoid_colors", "clothing", "outfits"],
                 },
               },
-              required: [
-                "skinToneExplanation",
-                "styleDirection",
-                "dressColors",
-                "dressPatterns",
-              ],
+              required: ["gender", "face_shape", "skin_tone", "undertone", "recommendations"],
             },
           },
         },
@@ -277,18 +202,40 @@ export async function POST(request: Request) {
     if (!result) {
       return NextResponse.json({
         result: {
-          skinToneExplanation: extractSkinToneExplanation(outputText),
-          styleDirection: "unisex",
-          dressColors: [
-            { name: "Deep Blue", hex: "#2D5EA8", reason: "Clean contrast with your tone." },
-            { name: "Emerald Green", hex: "#1F7A5A", reason: "Enhances natural warmth." },
-            { name: "Soft Beige", hex: "#D9C2A5", reason: "Creates a balanced neutral look." },
-          ],
-          dressPatterns: [
-            { name: "Solid Minimal", reason: "Keeps focus on skin-tone harmony." },
-            { name: "Subtle Floral", reason: "Adds softness without overpowering." },
-            { name: "Vertical Stripes", reason: "Adds elegant structure and flow." },
-          ],
+          gender: "unclear",
+          face_shape: "oval",
+          skin_tone: "medium",
+          undertone: "neutral",
+          recommendations: {
+            colors: ["Navy Blue", "Emerald Green", "White", "Charcoal", "Beige"],
+            avoid_colors: ["Neon Yellow", "Lime Green", "Hot Pink"],
+            clothing: {
+              neck: ["V-neck", "Round neck"],
+              sleeve: ["Half sleeve", "Long sleeve"],
+              fit: ["Regular fit", "Slim fit"],
+              patterns: ["Solid", "Subtle stripes", "Small checks"],
+            },
+            outfits: [
+              {
+                top: "Navy shirt",
+                bottom: "Beige chinos",
+                colors: "Navy + Beige",
+                reason: "Balanced contrast and versatile look.",
+              },
+              {
+                top: "White t-shirt",
+                bottom: "Charcoal trousers",
+                colors: "White + Charcoal",
+                reason: "Clean and flattering for most undertones.",
+              },
+              {
+                top: "Olive polo",
+                bottom: "Dark denim",
+                colors: "Olive + Indigo",
+                reason: "Adds depth while keeping tones natural.",
+              },
+            ],
+          },
         } satisfies ColorMatchResult,
       })
     }
