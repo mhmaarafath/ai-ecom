@@ -1,11 +1,5 @@
-import type { Metadata } from "next"
-import { ProductsManagementPage } from "@/components/products-management-page"
-
-export const metadata: Metadata = {
-  title: "Products",
-  description: "Manage your product catalog with AI-assisted descriptions.",
-}
+import { redirect } from "next/navigation"
 
 export default function ProductsPage() {
-  return <ProductsManagementPage />
+  redirect("/admin/products")
 }

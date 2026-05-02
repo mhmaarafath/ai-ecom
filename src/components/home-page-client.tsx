@@ -2,6 +2,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,10 +21,21 @@ type Product = {
   price: number
 }
 
-export function HomePageClient() {
+type HomePageClientProps = {
+  currentUser?: {
+    id: string
+    name: string
+    mobileNumber: string
+    profileImageUrl: string | null
+  } | null
+}
+
+export function HomePageClient({ currentUser = null }: HomePageClientProps) {
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -51,6 +63,16 @@ export function HomePageClient() {
     loadProducts()
   }, [])
 
+  const logout = async () => {
+    setIsLoggingOut(true)
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      router.refresh()
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
+
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-6">
       <header className="mb-8 flex items-center justify-between border-b pb-4">
@@ -69,9 +91,29 @@ export function HomePageClient() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Link href="/login" className={buttonVariants()}>
-          Login
-        </Link>
+        {currentUser ? (
+          <div className="flex items-center gap-2">
+            <div className="text-right">
+              <p className="text-sm font-medium">{currentUser.name}</p>
+              <p className="text-xs text-muted-foreground">{currentUser.mobileNumber}</p>
+            </div>
+            <Link href="/profile" className={buttonVariants({ variant: "outline" })}>
+              Profile
+            </Link>
+            <button
+              type="button"
+              className={buttonVariants({ variant: "outline" })}
+              onClick={() => void logout()}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? "Logging out..." : "Logout"}
+            </button>
+          </div>
+        ) : (
+          <Link href="/login" className={buttonVariants()}>
+            Login
+          </Link>
+        )}
       </header>
 
       <section id="shop" className="mb-10">
@@ -90,35 +132,25 @@ export function HomePageClient() {
       ) : (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <Card key={product.id} className="overflow-hidden">
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="h-48 w-full object-cover"
-              />
-              <CardHeader>
-                <CardTitle>{product.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-sm text-muted-foreground">{product.description}</p>
-                <p className="text-base font-semibold">${product.price.toFixed(2)}</p>
-              </CardContent>
-            </Card>
+            <Link key={product.id} href={`/products/${product.id}`} className="group block">
+              <Card className="overflow-hidden transition-shadow group-hover:shadow-md">
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="h-48 w-full object-cover"
+                />
+                <CardHeader>
+                  <CardTitle>{product.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{product.description}</p>
+                  <p className="text-base font-semibold">${product.price.toFixed(2)}</p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </section>
       )}
-
-      <section id="color-match" className="mt-12 rounded-xl border bg-muted/30 p-6">
-        <h2 className="text-xl font-semibold tracking-tight">
-          Upload Selfie for Color Match
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Find dress colors that best complement your face tone.
-        </p>
-        <Link href="/color-match" className={`${buttonVariants()} mt-4 inline-flex`}>
-          Open Color Match Page
-        </Link>
-      </section>
     </main>
   )
 }

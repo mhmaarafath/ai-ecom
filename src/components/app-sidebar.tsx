@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sidebar"
 import {
   AudioLinesIcon,
+  BotIcon,
   GalleryVerticalEndIcon,
   PackageIcon,
   TerminalIcon,
@@ -51,7 +52,18 @@ const data = {
       items: [
         {
           title: "Products",
-          url: "/products",
+          url: "/admin/products",
+        },
+      ],
+    },
+    {
+      title: "AI Ops",
+      url: "#",
+      icon: <BotIcon />,
+      items: [
+        {
+          title: "Cost Logs",
+          url: "/admin/ai-costs",
         },
       ],
     },

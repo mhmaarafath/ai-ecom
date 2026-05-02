@@ -19,4 +19,5 @@ export function createSupabaseAdminClient() {
 }
 
 export const PRODUCTS_BUCKET = process.env.SUPABASE_PRODUCTS_BUCKET ?? "products"
-// 75TcJMAnEe84CmOM
+export const PROFILE_IMAGES_BUCKET = process.env.SUPABASE_PROFILE_IMAGES_BUCKET ?? "profile-images"
+export const GENERATED_LOOKS_BUCKET = process.env.SUPABASE_GENERATED_LOOKS_BUCKET ?? "generated-looks"

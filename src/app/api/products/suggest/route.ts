@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
+import { logAiUsage } from "@/lib/ai-usage-log"
+import { buildUsageCostSummary, type OpenAiUsage } from "@/lib/openai-pricing"
 
 type OpenAiResponse = {
+  usage?: OpenAiUsage
   output?: Array<{
     type?: string
     content?: Array<{
@@ -99,7 +102,20 @@ export async function POST(request: Request) {
     }
 
     const outputText = extractOutputText(payload)
+    const usage = buildUsageCostSummary(model, payload.usage)
     const suggestion = parseSuggestion(outputText)
+    await logAiUsage({
+      source: "/api/products/suggest",
+      description: "Generated product title and description from uploaded image",
+      requestType: "text",
+      model,
+      usageSummary: usage,
+      metadata: {
+        feature: "product_management",
+        parsedSuggestion: Boolean(suggestion),
+      },
+    })
+
     if (!suggestion) {
       return NextResponse.json(
         {
@@ -110,7 +126,10 @@ export async function POST(request: Request) {
       )
     }
 
-    return NextResponse.json({ suggestion })
+    return NextResponse.json({
+      suggestion,
+      usage,
+    })
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Internal server error"

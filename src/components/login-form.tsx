@@ -22,7 +22,7 @@ export function LoginForm({
     event.preventDefault()
     if (username === "admin" && password === "admin") {
       setError("")
-      router.push("/dashboard")
+      router.push("/admin/dashboard")
       return
     }
     setError("Invalid credentials. Use admin / admin.")
@@ -37,7 +37,7 @@ export function LoginForm({
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-balance text-muted-foreground">
-                  Login with admin credentials
+                  Log in to the admin panel
                 </p>
               </div>
               <Field>

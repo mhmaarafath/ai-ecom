@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
+import { logAiUsage } from "@/lib/ai-usage-log"
+import { buildUsageCostSummary, type OpenAiUsage } from "@/lib/openai-pricing"
 
 type OpenAiResponse = {
+  usage?: OpenAiUsage
   output?: Array<{
     type?: string
     content?: Array<{
@@ -45,6 +48,35 @@ function parseResult(text: string): ColorMatchResult | null {
     return JSON.parse(cleaned) as ColorMatchResult
   } catch {
     return null
+  }
+}
+
+function normalizeOutfitColorNames(result: ColorMatchResult): ColorMatchResult {
+  const colorNameByHex = new Map(
+    result.recommendations.colors.map((color) => [color.hex.toLowerCase(), color.name])
+  )
+
+  return {
+    ...result,
+    recommendations: {
+      ...result.recommendations,
+      outfits: result.recommendations.outfits.map((outfit) => {
+        const withoutHexCodes = outfit.colors.replace(
+          /#([A-Fa-f0-9]{6})/g,
+          (hex) => colorNameByHex.get(hex.toLowerCase()) ?? ""
+        )
+        const normalizedColors = withoutHexCodes
+          .split(/[+,/]| and /i)
+          .map((part) => part.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+          .join(", ")
+
+        return {
+          ...outfit,
+          colors: normalizedColors || outfit.colors,
+        }
+      }),
+    },
   }
 }
 
@@ -95,6 +127,8 @@ export async function POST(request: Request) {
                   "4) undertone (warm, cool, neutral).",
                   "Then provide recommendations for colors, avoid colors, clothing (neck, sleeve, fit, patterns), and 3 outfits.",
                   "For colors and avoid_colors, return objects with both name and exact hex code.",
+                  "For each outfit colors field, use color names only, preferably chosen from the recommended colors list.",
+                  "Do not include hex codes or other color codes in outfit colors.",
                   "Return strictly valid JSON only in the exact schema.",
                 ].join(" "),
               },
@@ -214,7 +248,20 @@ export async function POST(request: Request) {
     }
 
     const outputText = extractOutputText(payload)
-    const result = parseResult(outputText)
+    const parsedResult = parseResult(outputText)
+    const result = parsedResult ? normalizeOutfitColorNames(parsedResult) : null
+    const usage = buildUsageCostSummary(model, payload.usage)
+    await logAiUsage({
+      source: "/api/color-match/analyze",
+      description: "Analyzed selfie for tone, profile, and outfit recommendations",
+      requestType: "text",
+      model,
+      usageSummary: usage,
+      metadata: {
+        feature: "color_match",
+        parsedResult: Boolean(result),
+      },
+    })
 
     if (!result) {
       return NextResponse.json({
@@ -264,10 +311,14 @@ export async function POST(request: Request) {
             ],
           },
         } satisfies ColorMatchResult,
+        usage,
       })
     }
 
-    return NextResponse.json({ result })
+    return NextResponse.json({
+      result,
+      usage,
+    })
   } catch (error) {
     const message = error instanceof Error ? error.message : "Internal server error"
     return NextResponse.json({ message }, { status: 500 })

@@ -54,6 +54,19 @@ type Product = {
   price: number
 }
 
+type UsageCostSummary = {
+  tokens: {
+    input: number
+    output: number
+    total: number
+  }
+  estimatedUsd: {
+    input: number
+    output: number
+    total: number
+  }
+}
+
 const emptyForm: ProductForm = {
   name: "",
   imageFile: null,
@@ -75,7 +88,11 @@ export function ProductsManagementPage() {
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
   const [isGeneratingSuggestion, setIsGeneratingSuggestion] = useState(false)
   const [detailsReady, setDetailsReady] = useState(false)
+  const [suggestionUsage, setSuggestionUsage] = useState<UsageCostSummary | null>(null)
   const [errorMessage, setErrorMessage] = useState("")
+
+  const formatTokens = (value: number) => new Intl.NumberFormat("en-US").format(value)
+  const formatUsd = (value: number) => `$${value.toFixed(6)}`
 
   const loadProducts = async () => {
     setIsLoading(true)
@@ -108,6 +125,7 @@ export function ProductsManagementPage() {
     setEditingId(null)
     setForm(emptyForm)
     setDetailsReady(false)
+    setSuggestionUsage(null)
     setIsModalOpen(true)
   }
 
@@ -126,6 +144,7 @@ export function ProductsManagementPage() {
       price: product.price.toString(),
     })
     setDetailsReady(true)
+    setSuggestionUsage(null)
     setIsModalOpen(true)
   }
 
@@ -136,6 +155,7 @@ export function ProductsManagementPage() {
     setMode("add")
     setIsGeneratingSuggestion(false)
     setDetailsReady(false)
+    setSuggestionUsage(null)
   }
 
   const onImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -154,6 +174,7 @@ export function ProductsManagementPage() {
     }))
     setIsGeneratingSuggestion(true)
     setDetailsReady(false)
+    setSuggestionUsage(null)
 
     try {
       const requestBody = new FormData()
@@ -164,6 +185,8 @@ export function ProductsManagementPage() {
         body: requestBody,
       })
       const payload = await response.json()
+      const usage = (payload.usage ?? null) as UsageCostSummary | null
+      setSuggestionUsage(usage)
 
       if (response.ok && payload.suggestion) {
         setForm((prev) => ({
@@ -319,6 +342,23 @@ export function ProductsManagementPage() {
                       <p className="text-xs text-muted-foreground">
                         Recognizing image and generating title + description...
                       </p>
+                    ) : null}
+                    {suggestionUsage ? (
+                      <div className="rounded-md border bg-muted/20 p-2 text-xs">
+                        <p className="font-medium text-foreground">AI Token Usage (Estimate)</p>
+                        <p className="text-muted-foreground">
+                          Input: {formatTokens(suggestionUsage.tokens.input)} | Output:{" "}
+                          {formatTokens(suggestionUsage.tokens.output)} | Total:{" "}
+                          {formatTokens(suggestionUsage.tokens.total)}
+                        </p>
+                        <p className="text-muted-foreground">
+                          Cost: {formatUsd(suggestionUsage.estimatedUsd.input)} +{" "}
+                          {formatUsd(suggestionUsage.estimatedUsd.output)} ={" "}
+                          <span className="font-medium text-foreground">
+                            {formatUsd(suggestionUsage.estimatedUsd.total)}
+                          </span>
+                        </p>
+                      </div>
                     ) : null}
                   </div>
 

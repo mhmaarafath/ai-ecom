@@ -108,6 +108,38 @@ export async function PUT(
   }
 }
 
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const productId = Number(id)
+    if (Number.isNaN(productId)) {
+      return NextResponse.json({ message: "Invalid product id" }, { status: 400 })
+    }
+
+    const supabase = createSupabaseAdminClient()
+    const { data, error } = await supabase
+      .from("products")
+      .select("id,name,image_url,description,price,created_at")
+      .eq("id", productId)
+      .single()
+
+    if (error || !data) {
+      return NextResponse.json(
+        { message: "Product not found", detail: error?.message },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({ product: toProduct(data as ProductRow) })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Internal server error"
+    return NextResponse.json({ message }, { status: 500 })
+  }
+}
+
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }

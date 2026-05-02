@@ -73,7 +73,7 @@ export function NavUser({
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href="/login" />}>
+            <DropdownMenuItem render={<Link href="/admin/login" />}>
               <LogOutIcon
               />
               Log out
