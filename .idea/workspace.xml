@@ -6,21 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="39d83853-7669-4205-9e08-734ba54e202c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/color-match/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/products/[id]/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/profile/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/app-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app-sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home-page-client.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/login-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/profile-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page-client.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/user-auth-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-auth-form.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +109,7 @@
       <workItem from="1777435443017" duration="31000" />
       <workItem from="1777708869473" duration="12303000" />
       <workItem from="1777769078872" duration="1216000" />
-      <workItem from="1777808952839" duration="7285000" />
+      <workItem from="1777808952839" duration="7979000" />
     </task>
     <servers />
   </component>

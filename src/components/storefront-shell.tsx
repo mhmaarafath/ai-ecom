@@ -36,6 +36,7 @@ const shopLinks = [
   { href: "/", label: "New In" },
   { href: "/", label: "Dresses" },
   { href: "/", label: "Occasion Wear" },
+  { href: "/features", label: "Features" },
 ]
 
 const footerGroups = [
@@ -46,6 +47,7 @@ const footerGroups = [
       { href: "/", label: "Best sellers" },
       { href: "/", label: "Party edits" },
       { href: "/", label: "Everyday styles" },
+      { href: "/features", label: "Features" },
     ],
   },
   {
@@ -267,6 +269,9 @@ export function StorefrontShell({ children, currentUser = null }: StorefrontShel
             <div className="flex flex-wrap items-center gap-4">
               <Link href="/" className="transition-colors hover:text-foreground">
                 Browse collection
+              </Link>
+              <Link href="/features" className="transition-colors hover:text-foreground">
+                Features
               </Link>
               <Link href={profileHref} className="transition-colors hover:text-foreground">
                 Profile
