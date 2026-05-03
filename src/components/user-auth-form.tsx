@@ -1,9 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Shirt, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -18,11 +20,11 @@ export function UserAuthForm({
   ...props
 }: UserAuthFormProps) {
   const router = useRouter()
-  const [mode, setMode] = useState<"login" | "register">(initialMode)
   const [name, setName] = useState("")
   const [mobileNumber, setMobileNumber] = useState("")
   const [message, setMessage] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const mode = initialMode
 
   const submitLabel = mode === "register" ? "Create Account" : "Login"
   const title = mode === "register" ? "Create Account" : "User Login"
@@ -78,26 +80,22 @@ export function UserAuthForm({
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <Button
-                  type="button"
-                  variant={mode === "login" ? "default" : "outline"}
-                  onClick={() => {
-                    setMode("login")
-                    setMessage("")
-                  }}
+                <Link
+                  href="/login"
+                  className={buttonVariants({
+                    variant: mode === "login" ? "default" : "outline",
+                  })}
                 >
                   Login
-                </Button>
-                <Button
-                  type="button"
-                  variant={mode === "register" ? "default" : "outline"}
-                  onClick={() => {
-                    setMode("register")
-                    setMessage("")
-                  }}
+                </Link>
+                <Link
+                  href="/register"
+                  className={buttonVariants({
+                    variant: mode === "register" ? "default" : "outline",
+                  })}
                 >
                   Register
-                </Button>
+                </Link>
               </div>
 
               {mode === "register" ? (
@@ -146,7 +144,22 @@ export function UserAuthForm({
               </Field>
             </FieldGroup>
           </form>
-          <div className="hidden bg-muted md:block" />
+          <div className="relative hidden bg-muted md:flex md:items-center md:justify-center">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <span className="inline-flex size-20 items-center justify-center rounded-full border bg-background text-foreground shadow-sm">
+                <Shirt className="size-9" />
+              </span>
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <Sparkles className="size-3.5" />
+                  AI Ecom
+                </div>
+                <p className="max-w-xs text-sm text-muted-foreground">
+                  Sign in to manage your profile, saved looks, and faster try-on access.
+                </p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

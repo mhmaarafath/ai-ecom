@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import { ColorMatchPageClient } from "@/components/color-match-page-client"
+import { ProductTryOnClient } from "@/components/product-try-on-client"
 import { getCurrentCustomerUser } from "@/lib/customer-auth"
 import { getGeneratedImageLimit } from "@/lib/generated-image-limit"
 import { createSupabaseAdminClient } from "@/lib/supabase-admin"
@@ -70,17 +70,15 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const remainingGenerationCount = Math.max(generatedImageLimit - generatedImageCount, 0)
 
   return (
-    <ColorMatchPageClient
-      productContext={{
+    <ProductTryOnClient
+      product={{
         id: product.id,
         name: product.name,
         imageUrl: product.image_url,
         description: product.description,
         price: Number(product.price),
       }}
-      useSavedProfileImageOnly
       savedProfileImageUrl={currentUser?.profileImageUrl ?? null}
-      initialPreviewUrl={currentUser?.profileImageUrl ?? ""}
       initialGeneratedDesignUrl={latestTryOnUrl}
       initialGeneratedDesignTitle={latestTryOnUrl ? `${product.name} - Current Dress` : ""}
       generatedImageLimit={generatedImageLimit}

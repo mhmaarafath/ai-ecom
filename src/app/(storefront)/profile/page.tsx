@@ -48,6 +48,7 @@ export default async function ProfilePage() {
 
   return (
     <ProfilePageClient
+      key={`${currentUser.id}:${currentUser.profileImageUrl ?? "none"}:${currentUser.profileAnalysisSavedAt ?? "none"}`}
       user={currentUser}
       generatedLooks={generatedLooks}
       generatedImageLimit={generatedImageLimit}

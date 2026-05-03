@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Shield, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -75,12 +75,21 @@ export function LoginForm({
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
-            <img
-              src="/globe.svg"
-              alt="Login"
-              className="absolute inset-0 h-full w-full object-contain p-10 opacity-80"
-            />
+          <div className="relative hidden bg-muted md:flex md:items-center md:justify-center">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <span className="inline-flex size-20 items-center justify-center rounded-full border bg-background text-foreground shadow-sm">
+                <Shield className="size-9" />
+              </span>
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <Sparkles className="size-3.5" />
+                  Admin Access
+                </div>
+                <p className="max-w-xs text-sm text-muted-foreground">
+                  Sign in to manage products, costs, and the admin dashboard.
+                </p>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -13,7 +13,7 @@ type OpenAiResponse = {
   }>
 }
 
-type ColorMatchResult = {
+type ProfileAnalyzeResult = {
   gender: "male" | "female" | "unclear"
   face_shape: "round" | "oval" | "square" | "heart" | "long"
   skin_tone: "fair" | "light" | "medium" | "olive" | "dark"
@@ -42,16 +42,16 @@ function extractOutputText(payload: OpenAiResponse): string {
   return outputText?.trim() ?? ""
 }
 
-function parseResult(text: string): ColorMatchResult | null {
+function parseResult(text: string): ProfileAnalyzeResult | null {
   const cleaned = text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim()
   try {
-    return JSON.parse(cleaned) as ColorMatchResult
+    return JSON.parse(cleaned) as ProfileAnalyzeResult
   } catch {
     return null
   }
 }
 
-function normalizeOutfitColorNames(result: ColorMatchResult): ColorMatchResult {
+function normalizeOutfitColorNames(result: ProfileAnalyzeResult): ProfileAnalyzeResult {
   const colorNameByHex = new Map(
     result.recommendations.colors.map((color) => [color.hex.toLowerCase(), color.name])
   )
@@ -143,7 +143,7 @@ export async function POST(request: Request) {
         text: {
           format: {
             type: "json_schema",
-            name: "color_match_analysis",
+            name: "profile_analysis",
             strict: true,
             schema: {
               type: "object",
@@ -252,13 +252,13 @@ export async function POST(request: Request) {
     const result = parsedResult ? normalizeOutfitColorNames(parsedResult) : null
     const usage = buildUsageCostSummary(model, payload.usage)
     await logAiUsage({
-      source: "/api/color-match/analyze",
-      description: "Analyzed selfie for tone, profile, and outfit recommendations",
+      source: "/api/profile/analyze",
+      description: "Analyzed profile selfie for tone, profile, and outfit recommendations",
       requestType: "text",
       model,
       usageSummary: usage,
       metadata: {
-        feature: "color_match",
+        feature: "profile_analysis",
         parsedResult: Boolean(result),
       },
     })
@@ -310,7 +310,7 @@ export async function POST(request: Request) {
               },
             ],
           },
-        } satisfies ColorMatchResult,
+        } satisfies ProfileAnalyzeResult,
         usage,
       })
     }

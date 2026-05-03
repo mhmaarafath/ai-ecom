@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "AI Ecom",
     template: "%s | AI Ecom",
   },
-  description: "AI-powered ecommerce experience for fashion and color matching.",
+  description: "AI-powered ecommerce experience for fashion discovery and profile-based shopping.",
 };
 
 export default function RootLayout({

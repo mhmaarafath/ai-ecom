@@ -6,23 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="39d83853-7669-4205-9e08-734ba54e202c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/designs/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/color-match/designs/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/products/[id]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/products/[id]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/products/suggest/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/products/suggest/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/dashboard/products/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/dashboard/products/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/products/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/products/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/admin/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/dashboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/admin/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/color-match/analyze/route.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/color-match/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/products/[id]/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/profile/page.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/app-sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/app-sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/color-match-page-client.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home-page-client.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/login-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/login-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/nav-user.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/nav-user.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/products-management-page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/products-management-page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/supabase-admin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/supabase-admin.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/supabase/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/supabase/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/profile-page-client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/profile-page-client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/user-auth-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/user-auth-form.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +31,7 @@
     <execution />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="90" />
+    <option name="cachedIndexableFilesCount" value="96" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,30 +50,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "js.debugger.nextJs.config.created.client": "true",
-    "js.debugger.nextJs.config.created.server": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/mhmaarafath/Workspace/cricket",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mhmaarafath/Workspace/cricket&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -124,7 +122,9 @@
       <workItem from="1777094812756" duration="18000" />
       <workItem from="1777383354788" duration="6267000" />
       <workItem from="1777435443017" duration="31000" />
-      <workItem from="1777708869473" duration="9320000" />
+      <workItem from="1777708869473" duration="12303000" />
+      <workItem from="1777769078872" duration="1216000" />
+      <workItem from="1777808952839" duration="7285000" />
     </task>
     <servers />
   </component>

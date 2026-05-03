@@ -2,16 +2,10 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { buttonVariants } from "@/components/ui/button"
+import { ArrowRight, Search } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+import { Input } from "@/components/ui/input"
 
 type Product = {
   id: number
@@ -21,21 +15,10 @@ type Product = {
   price: number
 }
 
-type HomePageClientProps = {
-  currentUser?: {
-    id: string
-    name: string
-    mobileNumber: string
-    profileImageUrl: string | null
-  } | null
-}
-
-export function HomePageClient({ currentUser = null }: HomePageClientProps) {
-  const router = useRouter()
+export function HomePageClient() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -63,64 +46,18 @@ export function HomePageClient({ currentUser = null }: HomePageClientProps) {
     loadProducts()
   }, [])
 
-  const logout = async () => {
-    setIsLoggingOut(true)
-    try {
-      await fetch("/api/auth/logout", { method: "POST" })
-      router.refresh()
-    } finally {
-      setIsLoggingOut(false)
-    }
-  }
-
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-6">
-      <header className="mb-8 flex items-center justify-between border-b pb-4">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink render={<a href="#shop" />}>
-                Shop
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink render={<Link href="/color-match" />}>
-                Face Tone Match
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        {currentUser ? (
-          <div className="flex items-center gap-2">
-            <div className="text-right">
-              <p className="text-sm font-medium">{currentUser.name}</p>
-              <p className="text-xs text-muted-foreground">{currentUser.mobileNumber}</p>
-            </div>
-            <Link href="/profile" className={buttonVariants({ variant: "outline" })}>
-              Profile
-            </Link>
-            <button
-              type="button"
-              className={buttonVariants({ variant: "outline" })}
-              onClick={() => void logout()}
-              disabled={isLoggingOut}
-            >
-              {isLoggingOut ? "Logging out..." : "Logout"}
-            </button>
-          </div>
-        ) : (
-          <Link href="/login" className={buttonVariants()}>
-            Login
-          </Link>
-        )}
-      </header>
-
-      <section id="shop" className="mb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Dress Collection</h1>
-        <p className="text-sm text-muted-foreground">
-          Explore available products
-        </p>
+    <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <section id="shop" className="mb-8">
+        <div className="relative max-w-xl">
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search dresses, colors, silhouettes"
+            className="h-11 rounded-lg bg-muted/30 pl-9"
+            aria-label="Search products"
+          />
+        </div>
       </section>
 
       {isLoading ? (
@@ -133,18 +70,27 @@ export function HomePageClient({ currentUser = null }: HomePageClientProps) {
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="group block">
-              <Card className="overflow-hidden transition-shadow group-hover:shadow-md">
+              <Card className="overflow-hidden border-border/70 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg">
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-48 w-full object-cover"
+                  className="h-64 w-full object-cover"
                 />
-                <CardHeader>
-                  <CardTitle>{product.name}</CardTitle>
+                <CardHeader className="space-y-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <CardTitle className="text-lg">{product.name}</CardTitle>
+                    <p className="shrink-0 text-base font-semibold">${product.price.toFixed(2)}</p>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-sm text-muted-foreground">{product.description}</p>
-                  <p className="text-base font-semibold">${product.price.toFixed(2)}</p>
+                <CardContent className="space-y-4">
+                  <p className="text-sm leading-6 text-muted-foreground">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Ready to view</span>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium">
+                      Shop now
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
                 </CardContent>
               </Card>
             </Link>

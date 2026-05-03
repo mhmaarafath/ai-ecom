@@ -16,6 +16,7 @@ import {
   AudioLinesIcon,
   BotIcon,
   GalleryVerticalEndIcon,
+  LayoutDashboardIcon,
   PackageIcon,
   TerminalIcon,
 } from "lucide-react"
@@ -45,10 +46,21 @@ const data = {
   ],
   navMain: [
     {
+      title: "Overview",
+      url: "#",
+      icon: <LayoutDashboardIcon />,
+      isActive: true,
+      items: [
+        {
+          title: "Dashboard",
+          url: "/admin/dashboard",
+        },
+      ],
+    },
+    {
       title: "Catalog",
       url: "#",
       icon: <PackageIcon />,
-      isActive: true,
       items: [
         {
           title: "Products",
